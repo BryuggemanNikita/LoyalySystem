@@ -1,23 +1,16 @@
+import { Card } from "./Cards";
+
 export class DescountCards{
-    private bronzeCards:number = 0;
-    private silverCards:number = 0;
-    private goldCards:number = 0;
+    private descontCards:Card[] = [];
     
-    constructor(bronzeCards:number, silverCards:number, goldCards:number){
-        this.bronzeCards = bronzeCards;
-        this.silverCards = silverCards;
-        this.goldCards = goldCards;
+    constructor(){};
+
+    public pushNewCard(card:Card){
+        this.descontCards.push(card);
+        this.descontCards.sort((e1, e2) => e1.getPercent() - e2.getPercent())
     };
 
-    public getBronzeCard():number{
-        return this.bronzeCards;
+    public getDescountCards():Card[]{
+        return this.descontCards;
     };
-    
-    public getSilverCard():number{
-        return this.silverCards;
-    };
-    
-    public getGoldCard():number{
-        return this.goldCards;
-    };
-}
+};

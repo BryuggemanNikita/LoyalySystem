@@ -1,6 +1,8 @@
 export class Product {
     private name: string;
     private cost: number;
+    private idProduct: number;
+    public static ID: number = 0;
     private static ERROR: string = "Ошибка";
 
     constructor(name: string, cost: number) {
@@ -15,6 +17,8 @@ export class Product {
         } else {
             throw new Error(Product.ERROR);
         };
+        Product.ID++;
+        this.idProduct = Product.ID;
     };
 
     public getName(): string {
@@ -23,6 +27,10 @@ export class Product {
 
     public getCost(): number {
         return this.cost;
+    };
+
+    public getId():number{
+        return this.idProduct;
     };
 
     public setCost(value: number): void {

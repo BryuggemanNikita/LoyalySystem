@@ -8,7 +8,7 @@ export class ShopSystem{
     private assortymentsOfProducts:Product[] = [];
     private arrUserBasketInShop:UserBasketInShop[] = [];
     private arrUserLoyaltyInShop:UserLoyaltyInShop[] = [];
-
+    private static UNDCARD:string = "отуствует"
     constructor(){};
 
     public pushProductsInAssortiment(product:Product):void{
@@ -17,15 +17,17 @@ export class ShopSystem{
 
     public pushNewUserInShopSystem(user:User):void{
         this.arrUserBasketInShop.push(new UserBasketInShop(user.getUserId(), new BasketOfProduct()));
-        this.arrUserLoyaltyInShop.push(new UserLoyaltyInShop(user.getUserId(), 0));
+        this.arrUserLoyaltyInShop.push(new UserLoyaltyInShop(user.getUserId(), 0, ShopSystem.UNDCARD));
     };
 
-    public pushProductInUserBasket(user:User, ind:number){
+    public pushProductInUserBasket(user:User, product:Product){
         let indexUserInSys = this.arrUserBasketInShop.map(e => e.id).indexOf(user.getUserId());
-        if(ind < 0 || ind >= this.assortymentsOfProducts.length){
-            throw new Error();
+        let indexProductInSys = this.assortymentsOfProducts.map(e => e.getId()).indexOf(product.getId());
+        if (indexProductInSys !== -1){
+            this.arrUserBasketInShop[indexUserInSys].basket.PushProductInBasket(this.assortymentsOfProducts[indexProductInSys]);
+            return;
         };
-        this.arrUserBasketInShop[indexUserInSys].basket.PushProductInBasket(this.assortymentsOfProducts[ind]);
+        console.log(`Товара "${product.getName()}" нет в ассортименте магазина`);
     };
 
     public getAssortyment():Product[]{

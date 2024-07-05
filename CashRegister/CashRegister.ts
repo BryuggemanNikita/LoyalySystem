@@ -2,28 +2,26 @@ import {User} from "../User/User";
 import {Shop} from "../Shop/Shop";
 
 export class CashRegister{
+    private static STRING: string = "\n------------------------------------------------";
     public static buy(user:User, shop:Shop):void{
         let userIndexInSys:number = shop.getIndexUserInShop(user);
         let userCostBasket:number = shop.getShopSystem().getUsersBasketInShop()[userIndexInSys].getBasket().getCostBasket();
         let userDescount:number = shop.getShopSystem().getUserLoyaltyInShop()[userIndexInSys].getDescount();
         let costBasketAfterDescount:number = userCostBasket - userCostBasket *(userDescount/100)
-        let bronzeCard = shop.getDescount().getCards().getBronzeCard();
-        let silverCard = shop.getDescount().getCards().getSilverCard();
-        let goldCard = shop.getDescount().getCards().getGoldCard();
+        let lengthDescCards: number = shop.getDescount().getCards().getDescountCards().length - 1;
+        let descountIndUser: number = shop.getDescount().getCards().getDescountCards().map(e => e.getPercent()).indexOf(shop.getShopSystem().getUserLoyaltyInShop()[userIndexInSys].getDescount())
+        let nextDescountInd: number = descountIndUser + 1;
+        let nameCard: string = shop.getShopSystem().getUserLoyaltyInShop()[userIndexInSys].getName();
+        let nameNextCard: string = shop.getDescount().getCards().getDescountCards()[nextDescountInd].getName();
+
 
         console.log(`\nСтоимость корзины до скидки: ${userCostBasket} рублей\nСкидка клиента: ${userDescount}%\nСтоимость корзины после скидки: ${costBasketAfterDescount} рублей`)
 
-        if (userCostBasket > 5000 && userDescount !== shop.getDescount().getCards().getGoldCard()){
-            if(userDescount === bronzeCard){
-                shop.getShopSystem().getUserLoyaltyInShop()[userIndexInSys].setDescount(silverCard);
-                console.log(`Поздравляем! Ваша скидочная карта была улучшена до серебрянной`);
-            }else if(userDescount === silverCard){
-                shop.getShopSystem().getUserLoyaltyInShop()[userIndexInSys].setDescount(goldCard);
-                console.log(`Поздравляем! Ваша скидочная карта была улучшена до золотой`);
-            };
-        }else{
-            console.log(`\nСтоимость вашей корзины ${userCostBasket} рублей, у вас есть возможность докупить на ${5000 - userCostBasket} рублей, чтобы получить скидочную карту с большей скидкой`)
+        if (lengthDescCards === descountIndUser) {
+            console.log("\nСпасибо за покупку! Возвращайтесь ещё");
+        } else {
+            console.log(`\nУ вас ${nameCard} карта, вы можете приобрести карту уровня ${nameNextCard}`)
         };
-        console.log("Спасибо за покупку! Возвращайтесь ещё");
+        console.log(CashRegister.STRING);
     };
 }
